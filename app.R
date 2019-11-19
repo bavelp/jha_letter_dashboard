@@ -5,18 +5,23 @@ library(plotly)
 
 # Load data ----
 
+# load in dataset
+# (currently via csv, want to integrate with database in local server)
 df <-
   read_csv("letter_data.csv") %>%
+  # remove unnecessary field "IDOCdoc_yes_no"
   select(-c("IDOCdoc_yes_no"))
-  # NEED TO REPLACE "" VALUES WITH "Unknown"
 
 # vectors of categorical variables ----
 
+# create function to organize df vectors into alphabetical order
+# with unique values
 alpha_order_unique <- function(vector) {
   output <- sort(unique(vector))
   return(output)
 }
 
+# create vectors of alphabetical, unique values for filters
 v.mailed_from <- alpha_order_unique(df$Facility_Mailed_From)
 v.about <- alpha_order_unique(df$Facility_About)
 v.code <- alpha_order_unique(df$Code)
@@ -25,6 +30,7 @@ v.offense <- alpha_order_unique(df$Off_Type)
 v.race <- alpha_order_unique(df$Race)
 v.gender <- alpha_order_unique(df$Gender)
 
+# create named vector of time variables
 v.time <- c(
   'Date of Birth' = 'DOB',
   'Admittance Date' = 'adminDate',
@@ -33,6 +39,7 @@ v.time <- c(
   'Letter Processed' = 'Letter Processed'
 )
 
+# create named vector of characteristics associated with letters
 v.char <- c(
   'Facility Mailed From' = 'Facility_Mailed_From',
   'Facility About' = 'Facility_About',
@@ -43,6 +50,7 @@ v.char <- c(
   'Offense Type' = 'Off_Type'
 )
 
+# create named vector of demographic info options
 v.demo <- c(
   'Race' = 'Race',
   'Gender' = 'Gender',
@@ -51,6 +59,7 @@ v.demo <- c(
   'Facility About' = 'Facility_About'
 )
 
+# create a negated version of `%in%`
 `%notin%` <- Negate(`%in%`)
 
 # application UI setup ----
