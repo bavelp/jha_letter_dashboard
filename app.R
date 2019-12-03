@@ -5,23 +5,21 @@ library(plotly)
 
 # Load data ----
 
-# load in dataset
-# (currently via csv, want to integrate with database in local server)
+# Load in dataset from .csv.
+# Eventually want to integrate with database in local server.
 df <-
   read_csv("letter_data.csv") %>%
-  # remove unnecessary field "IDOCdoc_yes_no"
+  # "IDOCdoc_yes_no" does not contain any information
   select(-c("IDOCdoc_yes_no"))
 
-# vectors of categorical variables ----
-
-# create function to organize df vectors into alphabetical order
-# with unique values
+# Create function to create vectors from df columns in alphabetical order
+# with unique values for dashboard filter dropdowns.
 alpha_order_unique <- function(vector) {
   output <- sort(unique(vector))
   return(output)
 }
 
-# create vectors of alphabetical, unique values for filters
+# Create vectors for filter dropdowns.
 v.mailed_from <- alpha_order_unique(df$Facility_Mailed_From)
 v.about <- alpha_order_unique(df$Facility_About)
 v.code <- alpha_order_unique(df$Code)
@@ -30,7 +28,7 @@ v.offense <- alpha_order_unique(df$Off_Type)
 v.race <- alpha_order_unique(df$Race)
 v.gender <- alpha_order_unique(df$Gender)
 
-# create named vector of time variables
+# Create named vector of all time variables
 v.time <- c(
   'Date of Birth' = 'DOB',
   'Admittance Date' = 'adminDate',
@@ -39,7 +37,7 @@ v.time <- c(
   'Letter Processed' = 'Letter Processed'
 )
 
-# create named vector of characteristics associated with letters
+# Create named vector of columns that describe letters/writers.
 v.char <- c(
   'Facility Mailed From' = 'Facility_Mailed_From',
   'Facility About' = 'Facility_About',
@@ -50,7 +48,7 @@ v.char <- c(
   'Offense Type' = 'Off_Type'
 )
 
-# create named vector of demographic info options
+# Create named vector of demographic columns.
 v.demo <- c(
   'Race' = 'Race',
   'Gender' = 'Gender',
@@ -59,7 +57,6 @@ v.demo <- c(
   'Facility About' = 'Facility_About'
 )
 
-# create a negated version of `%in%`
 `%notin%` <- Negate(`%in%`)
 
 # application UI setup ----
