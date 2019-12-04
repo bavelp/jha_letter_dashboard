@@ -179,9 +179,12 @@ ui <- dashboardPage(
             choices = v.char,
             multiple = FALSE
           ),
-          plotlyOutput("demoPieChart"),
-          plotlyOutput("demoBarChart")
+          plotlyOutput("demoPieChart")
         )
+      ),
+      column(
+        width = 6,
+        plotlyOutput("demoBarChart")
       )
     ),
     fluidRow()
