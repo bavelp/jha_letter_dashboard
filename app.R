@@ -166,6 +166,17 @@ ui <- dashboardPage(
     fluidRow(
       column(
         width = 6,
+        selectInput(
+          inputId = "demoDimension",
+          label = "Demographic Dimension",
+          choices = v.char,
+          multiple = FALSE
+        )
+      )
+    ),
+    fluidRow(
+      column(
+        width = 6,
         verticalLayout(
           # INCLUDE TABLE OF SUMMARY STATISTICS, SOME OF WHICH TO INCLUDE:
           #   - NUM. LETTERS VS. CORRESPONDING INMATES
@@ -173,12 +184,6 @@ ui <- dashboardPage(
           #   - 
           # 
           # DENSITY PLOT BY NUM. LETTERS
-          selectInput(
-            inputId = "demoDimension",
-            label = "Demographic Dimension",
-            choices = v.char,
-            multiple = FALSE
-          ),
           plotlyOutput("demoPieChart")
         )
       ),
@@ -186,8 +191,7 @@ ui <- dashboardPage(
         width = 6,
         plotlyOutput("demoBarChart")
       )
-    ),
-    fluidRow()
+    )
   )
 )
 
@@ -229,7 +233,13 @@ server <- function(input, output) {
         `Number of Correspondents` = sum(.$`Number of Correspondents`),
         .before = 1
       ) %>%
-      datatable(rownames = FALSE)
+      datatable(
+        rownames = FALSE,
+        options = list(
+          "searching" = FALSE,
+          "scroller" = TRUE
+        )
+      )
   })
   
   output$timeDensityPlot <- renderPlotly({
