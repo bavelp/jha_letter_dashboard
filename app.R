@@ -269,7 +269,9 @@ server <- function(input, output) {
       # xbins = list('size' = '12month')
     ) %>%
       layout(
-        title = paste("Count of ", title_unit, " by ", input$timeDimension, " over Time")
+        title = paste("Count of ", title_unit, " by ", input$timeDimension, " over Time"),
+        xaxis = list(title = "Date"),
+        yaxis = list(title = paste("Number of ", title_unit))
       )
   })
   
