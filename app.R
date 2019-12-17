@@ -11,7 +11,14 @@ library(DT)
 df <-
   read_csv("letter_data.csv") %>%
   # "IDOCdoc_yes_no" does not contain any information
-  select(-c("IDOCdoc_yes_no"))
+  select(-c("IDOCdoc_yes_no")) %>%
+  mutate(
+    DOB = as.Date(DOB, format = "%m/%d/%Y"),
+    adminDate = as.Date(adminDate, format = "%m/%d/%Y"),
+    ProjectedReleaseDate = as.Date(ProjectedReleaseDate, format = "%m/%d/%Y"),
+    `Letter Received` = as.Date(`Letter Received`, format = "%m/%d/%Y"),
+    `Letter Processed` = as.Date(`Letter Processed`, format = "%m/%d/%Y")
+  )
 
 # Create variables ----
 # Create function to create vectors from df columns in alphabetical order
@@ -285,7 +292,8 @@ server <- function(input, output) {
     plot_ly(
       labels = ~names(val_table),
       values = ~unname(val_table),
-      type = 'pie'
+      type = 'pie',
+      height = 800
     ) %>%
       layout(
         title = paste("Proportion of ", title_unit, " by ", input$demoDimension)
@@ -311,10 +319,14 @@ server <- function(input, output) {
     plot_ly(
       x = ~names(val_table),
       y = ~unname(val_table),
-      type = 'bar'
+      type = 'bar',
+      height = 800
     ) %>%
       layout(
-        title = paste("Proportion of ", title_unit, " by ", input$demoDimension)
+        title = paste("Proportion of ", title_unit, " by ", input$demoDimension),
+        yaxis = list(title = paste("Number of ", title_unit)),
+        xaxis = list(title = input$demoDimension),
+        margin = list(t = 50, b = 400)
       )
   })
 }
